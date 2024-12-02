@@ -1,3 +1,12 @@
-DAY=day02
+DAY_COUNT=03
+DAY=day$DAY_COUNT
+DIR=challenges/$DAY
 
-nx g @nx/node:application --name=$DAY --directory=challenges/$DAY --bundler=webpack --e2eTestRunner=none --no-interactive
+nx g @nx/node:application --name=$DAY --directory=$DIR --bundler=webpack --e2eTestRunner=none --no-interactive
+
+rm $DIR/src/main.ts
+sed "s/XX/${DAY_COUNT}/g" template/dayXX.spec.ts > $DIR/src/day${DAY_COUNT}.spec.ts
+sed "s/XX/${DAY_COUNT}/g" template/dayXX_1.ts > $DIR/src/day${DAY_COUNT}_1.ts
+sed "s/XX/${DAY_COUNT}/g" template/dayXX_2.ts > $DIR/src/day${DAY_COUNT}_2.ts
+sed "s/XX/${DAY_COUNT}/g" template/main.ts > $DIR/src/main.ts
+
