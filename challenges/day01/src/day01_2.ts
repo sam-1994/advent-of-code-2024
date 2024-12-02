@@ -1,4 +1,4 @@
-export function solve2(input: string): number {
+export function solve(input: string): number {
   const firstNumbers = [];
   const secondNumbers = [];
 

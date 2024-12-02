@@ -1,6 +1,6 @@
 import * as fs from 'node:fs';
-import { solve1 } from './day01_1';
-import { solve2 } from './day01_2';
+import { solve as solve1 } from './day01_1';
+import { solve as solve2 } from './day01_2';
 
 const inputExample = fs.readFileSync(`${__dirname}/assets/example.txt`, 'utf-8');
 
