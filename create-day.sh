@@ -1,4 +1,10 @@
-DAY_COUNT=03
+DAY_COUNT=$1
+
+if [ -z "$DAY_COUNT" ]; then
+  echo "Please provide a day number"
+  exit 1
+fi
+
 DAY=day$DAY_COUNT
 DIR=challenges/$DAY
 

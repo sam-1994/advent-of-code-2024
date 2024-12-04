@@ -3,6 +3,5 @@ export function solve(input: string): number {
     .split('\n')
     .filter((line) => line !== '');
 
-  let result = 0;
-  return result;
+  return 0;
 }
