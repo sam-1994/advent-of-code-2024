@@ -1,0 +1,26 @@
+{
+  "name": "day04",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "challenges/day04/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["build"],
+      "options": {
+        "buildTarget": "day04:build",
+        "runBuildTargetDependencies": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "day04:build:development"
+        },
+        "production": {
+          "buildTarget": "day04:build:production"
+        }
+      }
+    }
+  }
+}
