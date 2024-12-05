@@ -6,10 +6,10 @@ const inputExample = fs.readFileSync(`${__dirname}/assets/example.txt`, 'utf-8')
 
 describe('Day XX', () => {
   it('should solve example for part 1', () => {
-    expect(solve1(inputExample)).toBe(11);
+    expect(solve1(inputExample)).toBe(0);
   });
 
   it('should solve example for part 2', () => {
-    expect(solve2(inputExample)).toBe(31);
+    expect(solve2(inputExample)).toBe(0);
   });
 });
