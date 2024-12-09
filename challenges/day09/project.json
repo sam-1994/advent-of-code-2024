@@ -1,0 +1,26 @@
+{
+  "name": "day09",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "challenges/day09/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["build"],
+      "options": {
+        "buildTarget": "day09:build",
+        "runBuildTargetDependencies": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "day09:build:development"
+        },
+        "production": {
+          "buildTarget": "day09:build:production"
+        }
+      }
+    }
+  }
+}
