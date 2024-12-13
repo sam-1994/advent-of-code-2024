@@ -1,0 +1,26 @@
+{
+  "name": "day13",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "challenges/day13/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["build"],
+      "options": {
+        "buildTarget": "day13:build",
+        "runBuildTargetDependencies": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "day13:build:development"
+        },
+        "production": {
+          "buildTarget": "day13:build:production"
+        }
+      }
+    }
+  }
+}
