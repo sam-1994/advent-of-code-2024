@@ -1,5 +1,6 @@
 import fs from 'node:fs';
-const { createCanvas } = require('canvas');
+import { createCanvas } from 'canvas';
+import ffmpeg from 'fluent-ffmpeg';
 
 const RENDERING_COUNT = 11000;
 
@@ -52,10 +53,9 @@ export function printGrid(robots: Robot[], width: number, height: number, count:
 
   // Most likely at least 20% of the robots should have a neighbour to the right if they are building an image of a Christmas tree
   const countRobotsWithRightNeighbour = robots.filter((robot) => grid[robot.y][robot.x + 1] === '#').length;
-  if(countRobotsWithRightNeighbour < robots.length * 0.2) {
-    return;
+  if(countRobotsWithRightNeighbour >= robots.length * 0.4) {
+    console.log(`${count} seconds`);
   }
-  console.log(`${count} seconds: ${countRobotsWithRightNeighbour} neighbours`);
 
   const cellSize = 4; // Größe jeder Zelle in Pixel
   const imgWidth = width * cellSize;
@@ -95,4 +95,19 @@ export function solve(input: string, width: number, height: number): void {
   for(let i=1; i<=RENDERING_COUNT; i++) {
     printNextGrid(robots, width, height, i);
   }
+
+  console.log('Image rendering completed. Creating video...');
+
+  ffmpeg()
+    .input(__dirname + '/outputs/%d.png')
+    .inputOptions('-framerate 15')
+    .outputOptions('-c:v libx264')
+    .outputOptions('-pix_fmt yuv420p')
+    .on('end', () => {
+      console.log('Video was generated: output.mp4');
+    })
+    .on('error', (err) => {
+      console.error(`Error: ${err.message}`);
+    })
+    .save(__dirname + '/output.mp4');
 }
