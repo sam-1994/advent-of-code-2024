@@ -1,0 +1,14 @@
+Register A: 2024
+Register B: 0
+Register C: 0
+
+Program: 0,3,5,4,3,0
+
+
+---------------------
+
+P=0 -> A = A/8
+P=1 -> P = B
+P=2 -> P = A
+P=3 -> B = B^C
+P=4 -> Output: A
