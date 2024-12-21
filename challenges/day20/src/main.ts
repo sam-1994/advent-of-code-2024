@@ -5,4 +5,4 @@ import { solve as solve2 } from './day20_2';
 const input = fs.readFileSync(`${__dirname}/assets/input.txt`, 'utf-8');
 
 console.log('First Result:', solve1(input, 100));
-console.log('Second Result:', solve2(input));
+console.log('Second Result:', solve2(input, 100));

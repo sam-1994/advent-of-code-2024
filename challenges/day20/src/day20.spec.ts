@@ -42,7 +42,46 @@ describe('Day 20', () => {
     expect(solve1(inputExample, 65)).toBe(0);
   });
 
-  it('should solve example for part 2', () => {
-    expect(solve2(inputExample)).toBe(0);
+  it('should solve example for part 2 with 50 seconds', () => {
+    expect(solve2(inputExample, 50)).toBe(285);
+  });
+  it('should solve example for part 2 with 52 seconds', () => {
+    expect(solve2(inputExample, 52)).toBe(253);
+  });
+  it('should solve example for part 2 with 54 seconds', () => {
+    expect(solve2(inputExample, 54)).toBe(222);
+  });
+  it('should solve example for part 2 with 56 seconds', () => {
+    expect(solve2(inputExample, 56)).toBe(193);
+  });
+  it('should solve example for part 2 with 58 seconds', () => {
+    expect(solve2(inputExample, 58)).toBe(154);
+  });
+  it('should solve example for part 2 with 60 seconds', () => {
+    expect(solve2(inputExample, 60)).toBe(129);
+  });
+  it('should solve example for part 2 with 62 seconds', () => {
+    expect(solve2(inputExample, 62)).toBe(106);
+  });
+  it('should solve example for part 2 with 64 seconds', () => {
+    expect(solve2(inputExample, 64)).toBe(86);
+  });
+  it('should solve example for part 2 with 66 seconds', () => {
+    expect(solve2(inputExample, 66)).toBe(67);
+  });
+  it('should solve example for part 2 with 68 seconds', () => {
+    expect(solve2(inputExample, 68)).toBe(55);
+  });
+  it('should solve example for part 2 with 70 seconds', () => {
+    expect(solve2(inputExample, 70)).toBe(41);
+  });
+  it('should solve example for part 2 with 72 seconds', () => {
+    expect(solve2(inputExample, 72)).toBe(29);
+  });
+  it('should solve example for part 2 with 74 seconds', () => {
+    expect(solve2(inputExample, 74)).toBe(7);
+  });
+  it('should solve example for part 2 with 76 seconds', () => {
+    expect(solve2(inputExample, 76)).toBe(3);
   });
 });
