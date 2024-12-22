@@ -28,10 +28,12 @@ directionalMap.set('>', { x: 2, y: 0 });
 const cache = new Map<string, string[]>();
 
 function transformCode(
-  code: string,
+  code: string[],
   charMap: Map<string, Position>,
+  lastChar: string,
+  itteration: number
 ): string[] {
-  let lastChar = 'A';
+  const hash = `${itteration}-${lastChar}-${code}`;
   const emptyPosition = charMap.get(' ');
 
   let combinations: string[] = [''];
@@ -39,7 +41,6 @@ function transformCode(
   for (const nextChar of code) {
     let keyCombinations = [];
 
-    const hash = `${lastChar}-${nextChar}`;
     if(cache.has(hash)) {
       keyCombinations = cache.get(hash);
     } else {
@@ -89,17 +90,24 @@ export function solve(input: string, robotCount: number): number {
     console.log(code);
     const codeNumber = Number(code.substring(0, code.length - 1));
 
-    let transformations: string[] = transformCode(code, numericMap);
+    let transformations: string[][] = transformCode(code.split(''), numericMap, 'A', 0).map(
+      (code) => code.replace(/A/g, 'A ').split(' ')
+    );
 
-    for(let i=0; i<robotCount; i++) {
+    for(let i=1; i<=robotCount; i++) {
       transformations = transformations.reduce(
-        (acc, code) => {
-          const currentTransformations = transformCode(code, directionalMap);
+        (acc: string[][], code) => {
+          const currentTransformations = transformCode(code, directionalMap, 'A', i).map(
+            (code) => code.replace(/A/g, 'A ').split(' ')
+          );
           acc.push(...currentTransformations);
           return acc;
         },
         []
       );
+
+      const minLength = Math.min(...transformations.map((code) => code.length));
+      transformations = transformations.filter((code) => code.length === minLength);
     }
 
     return acc + codeNumber * Math.min(...transformations.map((code) => code.length));
