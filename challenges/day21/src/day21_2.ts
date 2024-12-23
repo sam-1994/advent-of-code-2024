@@ -25,46 +25,39 @@ directionalMap.set('<', { x: 0, y: 0 });
 directionalMap.set('v', { x: 1, y: 0 });
 directionalMap.set('>', { x: 2, y: 0 });
 
-const cache = new Map<string, string[]>();
+const cache = new Map<string, number>();
 
 function transformCode(
-  code: string[],
-  charMap: Map<string, Position>,
-  lastChar: string,
-  itteration: number
+  code: string,
+  charMap: Map<string, Position>
 ): string[] {
-  const hash = `${itteration}-${lastChar}-${code}`;
   const emptyPosition = charMap.get(' ');
 
   let combinations: string[] = [''];
+  let lastChar = 'A';
 
   for (const nextChar of code) {
-    let keyCombinations = [];
+    const keyCombinations = [];
 
-    if(cache.has(hash)) {
-      keyCombinations = cache.get(hash);
-    } else {
-      const lastPosition = charMap.get(lastChar);
-      const nextPosition = charMap.get(nextChar);
+    const lastPosition = charMap.get(lastChar);
+    const nextPosition = charMap.get(nextChar);
 
-      const diffY = nextPosition.y - lastPosition.y;
-      const diffYEmpty = emptyPosition.y - lastPosition.y;
+    const diffY = nextPosition.y - lastPosition.y;
+    const diffYEmpty = emptyPosition.y - lastPosition.y;
 
-      const diffX = nextPosition.x - lastPosition.x;
-      const diffXEmpty = emptyPosition.x - lastPosition.x;
+    const diffX = nextPosition.x - lastPosition.x;
+    const diffXEmpty = emptyPosition.x - lastPosition.x;
 
-      if (diffY !== 0 && (diffYEmpty !== diffY || diffXEmpty !== 0)) {
-        const combination = (diffY > 0 ? '^' : 'v').repeat(Math.abs(diffY)) + (diffX > 0 ? '>' : '<').repeat(Math.abs(diffX)) + 'A';
-        keyCombinations.push(combination);
-      }
-      if (diffX !== 0 && (diffXEmpty !== diffX || diffYEmpty !== 0)) {
-        const combination = (diffX > 0 ? '>' : '<').repeat(Math.abs(diffX)) + (diffY > 0 ? '^' : 'v').repeat(Math.abs(diffY)) + 'A';
-        keyCombinations.push(combination);
-      }
-      if (diffX === 0 && diffY === 0) {
-        keyCombinations.push('A');
-      }
-      cache.set(hash, keyCombinations);
+    if (diffY !== 0 && (diffYEmpty !== diffY || diffXEmpty !== 0)) {
+      const combination = (diffY > 0 ? '^' : 'v').repeat(Math.abs(diffY)) + (diffX > 0 ? '>' : '<').repeat(Math.abs(diffX)) + 'A';
+      keyCombinations.push(combination);
+    }
+    if (diffX !== 0 && (diffXEmpty !== diffX || diffYEmpty !== 0)) {
+      const combination = (diffX > 0 ? '>' : '<').repeat(Math.abs(diffX)) + (diffY > 0 ? '^' : 'v').repeat(Math.abs(diffY)) + 'A';
+      keyCombinations.push(combination);
+    }
+    if (diffX === 0 && diffY === 0) {
+      keyCombinations.push('A');
     }
 
     combinations = combinations.reduce((acc: string[], combination) => {
@@ -81,36 +74,48 @@ function transformCode(
   return combinations;
 }
 
+export function getTransformationCosts(
+  code: string,
+  charMap: Map<string, Position>,
+  iterations: number
+): number {
+  const hash = `${iterations}-${code}`;
+  if (cache.has(hash)) {
+    return cache.get(hash);
+  }
+  const transformations = transformCode(code, charMap);
+
+  const costs = Math.min(...transformations.map((transformation) => {
+    if (iterations === 0) {
+      return transformation.length;
+    } else {
+      const codeParts = transformation.replace(/A/g, 'A ').split(' ');
+      return codeParts.reduce(
+        (acc, codePart) => acc + getTransformationCosts(codePart, charMap, iterations - 1),
+        0
+      );
+    }
+  }));
+
+  cache.set(hash, costs);
+  return costs;
+
+}
+
 export function solve(input: string, robotCount: number): number {
   const codes = input
     .split('\n')
     .filter((line) => line !== '');
 
   return codes.reduce((acc, code) => {
-    console.log(code);
     const codeNumber = Number(code.substring(0, code.length - 1));
 
-    let transformations: string[][] = transformCode(code.split(''), numericMap, 'A', 0).map(
-      (code) => code.replace(/A/g, 'A ').split(' ')
+    const transformations = transformCode(code, numericMap);
+    const transformationCosts = transformations.map(
+      (transformation) => getTransformationCosts(transformation, directionalMap, robotCount-1 )
     );
 
-    for(let i=1; i<=robotCount; i++) {
-      transformations = transformations.reduce(
-        (acc: string[][], code) => {
-          const currentTransformations = transformCode(code, directionalMap, 'A', i).map(
-            (code) => code.replace(/A/g, 'A ').split(' ')
-          );
-          acc.push(...currentTransformations);
-          return acc;
-        },
-        []
-      );
-
-      const minLength = Math.min(...transformations.map((code) => code.length));
-      transformations = transformations.filter((code) => code.length === minLength);
-    }
-
-    return acc + codeNumber * Math.min(...transformations.map((code) => code.length));
+    return acc + codeNumber * Math.min(...transformationCosts);
   }, 0);
 }
 
